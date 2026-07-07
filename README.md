@@ -22,7 +22,7 @@ For more technical information, read the code in src/compiler.
 
 ## Public API
 
-This section was too out of date to be useful. We hope to re-add it as some point.
+This section was too out of date to be useful. We hope to re-add it at some point.
 
 ## License
 
