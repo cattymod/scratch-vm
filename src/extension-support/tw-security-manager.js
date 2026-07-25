@@ -33,10 +33,19 @@ class SecurityManager {
      * @param {string} extensionURL The URL of the custom extension.
      * @returns {'worker'|'iframe'|'unsandboxed'|Promise<'worker'|'iframe'|'unsandboxed'>}
      */
-    getSandboxMode (extensionURL) {
-        // Default to worker for Scratch compatibility
-        return Promise.resolve('worker');
+getSandboxMode (extensionURL) {
+    const hostname = new URL(extensionURL).hostname;
+
+    if (
+        hostname === 'cattymod.app' ||
+        hostname.endsWith('.cattymod.app')
+    ) {
+        return Promise.resolve('unsandboxed');
     }
+
+    // Everything else stays sandboxed
+    return Promise.resolve('worker');
+}
 
     /**
      * Determine whether a custom extension that was stored inside a project may be
