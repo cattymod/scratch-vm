@@ -33,20 +33,15 @@ class SecurityManager {
      * @param {string} extensionURL The URL of the custom extension.
      * @returns {'worker'|'iframe'|'unsandboxed'|Promise<'worker'|'iframe'|'unsandboxed'>}
      */
-getSandboxMode(extensionURL) {
-    const url = new URL(extensionURL);
-
+getSandboxMode (extensionURL) {
     if (
-        url.hostname === 'cattymod.app' ||
-        url.hostname.endsWith('.cattymod.app')
+        extensionURL.startsWith('https://cattymod.app/') ||
+        extensionURL.startsWith('https://extensions.turbowarp.org/')
     ) {
         return Promise.resolve('unsandboxed');
     }
 
-    if (url.hostname === 'extensions.turbowarp.org') {
-        return Promise.resolve('unsandboxed');
-    }
-
+    // Default to worker for Scratch compatibility
     return Promise.resolve('worker');
 }
 
@@ -57,18 +52,10 @@ getSandboxMode(extensionURL) {
      * @param {string} extensionURL The URL of the custom extension.
      * @returns {Promise<boolean>|boolean}
      */
-canLoadExtensionFromProject(extensionURL) {
-    const hostname = new URL(extensionURL).hostname;
-
-    if (
-        hostname === 'cattymod.app' ||
-        hostname.endsWith('.cattymod.app')
-    ) {
-        return Promise.resolve(true);
+    canLoadExtensionFromProject (extensionURL) {
+        // Default to false for security
+        return Promise.resolve(false);
     }
-
-    return Promise.resolve(false);
-}
 
     /**
      * Allows last-minute changing the real URL of the extension that gets loaded.
