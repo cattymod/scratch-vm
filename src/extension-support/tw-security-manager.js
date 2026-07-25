@@ -33,17 +33,20 @@ class SecurityManager {
      * @param {string} extensionURL The URL of the custom extension.
      * @returns {'worker'|'iframe'|'unsandboxed'|Promise<'worker'|'iframe'|'unsandboxed'>}
      */
-getSandboxMode (extensionURL) {
-    const hostname = new URL(extensionURL).hostname;
+getSandboxMode(extensionURL) {
+    const url = new URL(extensionURL);
 
     if (
-        hostname === 'cattymod.app' ||
-        hostname.endsWith('.cattymod.app')
+        url.hostname === 'cattymod.app' ||
+        url.hostname.endsWith('.cattymod.app')
     ) {
         return Promise.resolve('unsandboxed');
     }
 
-    // Everything else stays sandboxed
+    if (url.hostname === 'extensions.turbowarp.org') {
+        return Promise.resolve('unsandboxed');
+    }
+
     return Promise.resolve('worker');
 }
 
