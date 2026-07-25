@@ -54,10 +54,18 @@ getSandboxMode (extensionURL) {
      * @param {string} extensionURL The URL of the custom extension.
      * @returns {Promise<boolean>|boolean}
      */
-    canLoadExtensionFromProject (extensionURL) {
-        // Default to false for security
-        return Promise.resolve(false);
+canLoadExtensionFromProject(extensionURL) {
+    const hostname = new URL(extensionURL).hostname;
+
+    if (
+        hostname === 'cattymod.app' ||
+        hostname.endsWith('.cattymod.app')
+    ) {
+        return Promise.resolve(true);
     }
+
+    return Promise.resolve(false);
+}
 
     /**
      * Allows last-minute changing the real URL of the extension that gets loaded.
