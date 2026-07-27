@@ -26,9 +26,9 @@ class TurboWarpBlocks {
         return {
             id: 'tw',
             name: 'CattyMod',
-            color1: '#4cc3ff',
-            color2: '#1aaac7',
-            color3: '#389cc7',
+            color1: '#4da8ff',
+            color2: '#2490f5',
+            color3: '#1a75cc',
             docsURI: 'https://docs.turbowarp.org/blocks',
             menuIconURI: iconURI,
             blockIconURI: iconURI,
