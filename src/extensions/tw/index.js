@@ -29,7 +29,7 @@ class TurboWarpBlocks {
             color1: '#4da8ff',
             color2: '#2490f5',
             color3: '#1a75cc',
-            docsURI: 'https://docs.turbowarp.org/blocks',
+            docsURI: 'https://cattymod.app/docs/blocks',
             menuIconURI: iconURI,
             blockIconURI: iconURI,
             blocks: [
