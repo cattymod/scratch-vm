@@ -57,6 +57,24 @@ class TurboWarpBlocks {
                             defaultValue: '0'
                         }
                     }
+                },
+                {
+                    opcode: 'getColorTheme',
+                    text: formatMessage({
+                        id: 'tw.blocks.getColorTheme',
+                        default: 'Get Color Theme',
+                        description: 'Returns the current CattyMod color theme'
+                    }),
+                    blockType: BlockType.REPORTER
+                },
+                {
+                    opcode: 'getGUITheme',
+                    text: formatMessage({
+                        id: 'tw.blocks.getGUITheme',
+                        default: 'Get GUI Theme',
+                        description: 'Returns the current CattyMod GUI theme'
+                    }),
+                    blockType: BlockType.REPORTER
                 }
             ],
             menus: {
@@ -100,6 +118,30 @@ class TurboWarpBlocks {
     getButtonIsDown (args, util) {
         const button = Cast.toNumber(args.MOUSE_BUTTON);
         return util.ioQuery('mouse', 'getButtonIsDown', [button]);
+    }
+
+    getColorTheme () {
+        const theme = (localStorage.getItem('tw:theme') || '').toLowerCase();
+
+        if (theme.includes('red')) return 'Red';
+        if (theme.includes('orange')) return 'Orange';
+        if (theme.includes('yellow')) return 'Yellow';
+        if (theme.includes('green')) return 'Green';
+        if (theme.includes('indigo')) return 'Indigo';
+        if (theme.includes('violet')) return 'Violet';
+        if (theme.includes('purple')) return 'Purple';
+        if (theme.includes('rainbow')) return 'Rainbow';
+
+        return 'Blue';
+    }
+
+    getGUITheme () {
+        const theme = (localStorage.getItem('tw:theme') || '').toLowerCase();
+
+        if (theme.includes('light')) return 'Light';
+        if (theme.includes('dark')) return 'Dark';
+
+        return 'Dark';
     }
 }
 
