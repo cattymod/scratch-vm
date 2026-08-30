@@ -63,7 +63,7 @@ class TurboWarpBlocks {
                     text: formatMessage({
                         id: 'tw.blocks.getColorTheme',
                         default: 'Get Color Theme',
-                        description: 'Returns the current CattyMod color theme'
+                        description: 'Block that returns the current CattyMod color theme'
                     }),
                     blockType: BlockType.REPORTER
                 },
@@ -72,7 +72,7 @@ class TurboWarpBlocks {
                     text: formatMessage({
                         id: 'tw.blocks.getGUITheme',
                         default: 'Get GUI Theme',
-                        description: 'Returns the current CattyMod GUI theme'
+                        description: 'Block that returns the current CattyMod GUI theme'
                     }),
                     blockType: BlockType.REPORTER
                 }
