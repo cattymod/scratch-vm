@@ -3,11 +3,11 @@ const BlockType = require('../../extension-support/block-type');
 const ArgumentType = require('../../extension-support/argument-type');
 const Cast = require('../../util/cast');
 
-// change image
+// CattyMod icon
 const iconURI = "https://studio.cattymod.app/images/512.png";
 
 /**
- * Class for TurboWarp blocks
+ * Class for CattyMod blocks
  * @constructor
  */
 class TurboWarpBlocks {
@@ -32,6 +32,7 @@ class TurboWarpBlocks {
             docsURI: 'https://cattymod.app/docs/blocks',
             menuIconURI: iconURI,
             blockIconURI: iconURI,
+
             blocks: [
                 {
                     opcode: 'getLastKeyPressed',
@@ -77,6 +78,7 @@ class TurboWarpBlocks {
                     blockType: BlockType.REPORTER
                 }
             ],
+
             menus: {
                 mouseButton: {
                     items: [
@@ -121,7 +123,14 @@ class TurboWarpBlocks {
     }
 
     getColorTheme () {
-        const theme = (localStorage.getItem('tw:theme') || '').toLowerCase();
+        const storedTheme = localStorage.getItem('tw:theme');
+
+        // If tw:theme does not exist, default to Blue.
+        if (storedTheme === null) {
+            return 'Blue';
+        }
+
+        const theme = storedTheme.toLowerCase();
 
         if (theme.includes('red')) return 'Red';
         if (theme.includes('orange')) return 'Orange';
@@ -132,17 +141,26 @@ class TurboWarpBlocks {
         if (theme.includes('purple')) return 'Purple';
         if (theme.includes('rainbow')) return 'Rainbow';
 
-        // Missing or unrecognized color = Blue
+        // Unknown or missing color = Blue.
         return 'Blue';
     }
 
     getGUITheme () {
-        const theme = (localStorage.getItem('tw:theme') || '').toLowerCase();
+        const storedTheme = localStorage.getItem('tw:theme');
+
+        // If tw:theme does not exist, use the system theme.
+        if (storedTheme === null) {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ?
+                'Dark' :
+                'Light';
+        }
+
+        const theme = storedTheme.toLowerCase();
 
         if (theme.includes('dark')) return 'Dark';
         if (theme.includes('light')) return 'Light';
 
-        // Missing or unspecified GUI theme = Light
+        // If no GUI theme is specified, default to Light.
         return 'Light';
     }
 }
