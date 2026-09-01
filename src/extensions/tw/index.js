@@ -132,16 +132,18 @@ class TurboWarpBlocks {
         if (theme.includes('purple')) return 'Purple';
         if (theme.includes('rainbow')) return 'Rainbow';
 
+        // Missing or unrecognized color = Blue
         return 'Blue';
     }
 
     getGUITheme () {
         const theme = (localStorage.getItem('tw:theme') || '').toLowerCase();
 
-        if (theme.includes('light')) return 'Light';
         if (theme.includes('dark')) return 'Dark';
+        if (theme.includes('light')) return 'Light';
 
-        return 'Dark';
+        // Missing or unspecified GUI theme = Light
+        return 'Light';
     }
 }
 
