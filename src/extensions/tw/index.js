@@ -26,7 +26,7 @@ class TurboWarpBlocks {
         return {
             id: 'tw',
             name: 'CattyMod',
-            color1: '#4da8ff',
+            color1: '#1DB4FF',
             color2: '#2490f5',
             color3: '#1a75cc',
             docsURI: 'https://cattymod.app/docs/blocks',
