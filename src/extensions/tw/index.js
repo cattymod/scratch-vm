@@ -76,6 +76,15 @@ class TurboWarpBlocks {
                         description: 'Block that returns the current CattyMod GUI theme'
                     }),
                     blockType: BlockType.REPORTER
+                },
+                {
+                    opcode: 'getGoIcon',
+                    text: formatMessage({
+                        id: 'tw.blocks.getGoIcon',
+                        default: 'Get Go Icon',
+                        description: 'Block that returns the currently selected CattyMod go icon'
+                    }),
+                    blockType: BlockType.REPORTER
                 }
             ],
 
@@ -162,6 +171,18 @@ class TurboWarpBlocks {
 
         // If no GUI theme is specified, default to Light.
         return 'Light';
+    }
+
+    getGoIcon () {
+        const goIcon = localStorage.getItem('cattymod:goIcon');
+
+        if (goIcon === 'play') return 'Play Button';
+        if (goIcon === 'greenflag') return 'Green Flag';
+        if (goIcon === 'blueflag') return 'Blue Flag';
+        if (goIcon === 'purpleflag') return 'Purple Flag';
+
+        // Unknown or missing icon.
+        return '';
     }
 }
 
