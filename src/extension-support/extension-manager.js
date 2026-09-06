@@ -336,13 +336,23 @@ class ExtensionManager {
         }
 
         // Remove the worker URL associated with the extension.
-        const parts = serviceName.split('.');
-        if (parts.length >= 2) {
-            const workerId = Number(parts[1]);
+        // Service names can have two formats:
+        // - "unsandboxed.WORKER_ID.EXTENSION_ID" or "extension.WORKER_ID.EXTENSION_ID" (dot-delimited)
+        // - "extension_WORKER_ID_EXTENSION_ID" (underscore-delimited)
+        const dotParts = serviceName.split('.');
+        const underscoreParts = serviceName.split('_');
 
-            if (Number.isInteger(workerId)) {
-                delete this.workerURLs[workerId];
-            }
+        let workerId = null;
+        if (dotParts.length >= 2) {
+            // Dot-delimited format
+            workerId = Number(dotParts[1]);
+        } else if (underscoreParts.length >= 2) {
+            // Underscore-delimited format
+            workerId = Number(underscoreParts[1]);
+        }
+
+        if (Number.isInteger(workerId)) {
+            delete this.workerURLs[workerId];
         }
 
         // Remove the extension from the loaded extensions map.
