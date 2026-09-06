@@ -358,12 +358,27 @@ class ExtensionManager {
         // Remove the extension from the loaded extensions map.
         this._loadedExtensions.delete(extensionId);
 
-        // Remove its primitives from the runtime.
-        return dispatch.call('runtime', '_removeExtensionPrimitive', extensionId)
-            .then(() => this.refreshBlocks())
+        // Remove the extension's blocks from the runtime.
+        try {
+            const blockInfo = this.runtime._blockInfo;
+            if (blockInfo && Array.isArray(blockInfo)) {
+                const index = blockInfo.findIndex(info => info.id === extensionId);
+                if (index >= 0) {
+                    blockInfo.splice(index, 1);
+                    // Emit event to notify that the extension was removed
+                    if (this.runtime.emit) {
+                        this.runtime.emit('EXTENSION_REMOVED', extensionId);
+                    }
+                }
+            }
+        } catch (e) {
+            log.warn(`Error removing extension primitives for ${extensionId}:`, e);
+        }
+
+        // Refresh blocks for remaining extensions.
+        return this.refreshBlocks()
             .catch(e => {
-                log.warn(`Failed to remove primitives for extension ${extensionId}:`, e);
-                return this.refreshBlocks();
+                log.warn(`Failed to refresh blocks after removing extension ${extensionId}:`, e);
             });
     }
 
