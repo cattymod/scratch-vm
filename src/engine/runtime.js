@@ -466,6 +466,8 @@ class Runtime extends EventEmitter {
 
         this.debug = false;
 
+        this.projectRedirection = null;
+        
         this._lastStepTime = Date.now();
         this.interpolationEnabled = false;
 
@@ -2899,7 +2901,8 @@ class Runtime extends EventEmitter {
             turbo: this.turboMode,
             hq: this.renderer ? this.renderer.useHighQualityRender : false,
             width: this.stageWidth,
-            height: this.stageHeight
+            height: this.stageHeight,
+            projectRedirection: this.projectRedirection || null
         };
     }
 
