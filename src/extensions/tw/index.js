@@ -63,7 +63,7 @@ class TurboWarpBlocks {
                     opcode: 'getColorTheme',
                     text: formatMessage({
                         id: 'tw.blocks.getColorTheme',
-                        default: 'Get Color Theme',
+                        default: 'Get Accent Theme',
                         description: 'Block that returns the current CattyMod color theme'
                     }),
                     blockType: BlockType.REPORTER
