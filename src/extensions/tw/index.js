@@ -166,6 +166,8 @@ class TurboWarpBlocks {
 
         const theme = storedTheme.toLowerCase();
 
+        // Midnight is a separate GUI theme.
+        if (theme.includes('midnight')) return 'Midnight';
         if (theme.includes('dark')) return 'Dark';
         if (theme.includes('light')) return 'Light';
 
