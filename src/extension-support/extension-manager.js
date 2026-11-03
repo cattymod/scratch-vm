@@ -205,8 +205,6 @@ class ExtensionManager {
 
             const fakeWorkerId = this.nextExtensionWorker++;
 
-            this.workerURLs[fakeWorkerId] = extensionURL;
-
             for (const extensionObject of extensionObjects) {
                 const extensionInfo = extensionObject.getInfo();
 
@@ -230,6 +228,7 @@ class ExtensionManager {
                 );
             }
 
+            this.workerURLs[fakeWorkerId] = extensionURL;
             this._finishedLoadingExtensionScript();
             return;
         }
@@ -547,6 +546,7 @@ class ExtensionManager {
         delete this.pendingWorkers[id];
 
         if (e) {
+            delete this.workerURLs[id];
             workerInfo.reject(e);
         } else {
             workerInfo.resolve();

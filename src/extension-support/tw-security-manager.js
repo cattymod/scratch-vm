@@ -153,6 +153,7 @@ getSandboxMode (extensionURL) {
 
     /**
      * Determine whether an extension is allowed to embed content from a given URL.
+     * javascript: URLs are always rejected (this method is never called).
      * @param {string} documentURL The URL of the embed.
      * @returns {Promise<boolean>|boolean}
      */

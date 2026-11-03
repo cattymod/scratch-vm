@@ -37,6 +37,12 @@ class IntermediateStackBlock {
         this.yields = yields;
 
         /**
+         * ID of the Scratch block this was generated from, if any.
+         * @type {string?}
+         */
+        this.blockId = null;
+
+        /**
          * Should state changes made by this stack block be ignored? Used for testing.
          * @type {boolean}
          */
@@ -317,7 +323,7 @@ class IntermediateScript {
          * If true, this script will be compiled as a generator function (function*)
          * @type {boolean}
          */
-        this.yields = true;
+        this.yields = false;
 
         /**
          * Whether this script should use the "warp timer"
