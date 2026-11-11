@@ -85,6 +85,31 @@ class TurboWarpBlocks {
                         description: 'Block that returns the currently selected CattyMod go icon'
                     }),
                     blockType: BlockType.REPORTER
+                },
+                {
+                    opcode: 'switchLayout',
+                    text: formatMessage({
+                        id: 'tw.blocks.switchLayout',
+                        default: 'Switch Layout to [LAYOUT]',
+                        description: 'Switches between Player, Editor, and Fullscreen layouts'
+                    }),
+                    blockType: BlockType.COMMAND,
+                    arguments: {
+                        LAYOUT: {
+                            type: ArgumentType.STRING,
+                            menu: 'layout',
+                            defaultValue: 'player'
+                        }
+                    }
+                },
+                {
+                    opcode: 'getCurrentLayout',
+                    text: formatMessage({
+                        id: 'tw.blocks.getCurrentLayout',
+                        default: 'Current Layout',
+                        description: 'Returns the current CattyMod layout'
+                    }),
+                    blockType: BlockType.REPORTER
                 }
             ],
 
@@ -117,6 +142,35 @@ class TurboWarpBlocks {
                         }
                     ],
                     acceptReporters: true
+                },
+                layout: {
+                    items: [
+                        {
+                            text: formatMessage({
+                                id: 'tw.blocks.layout.player',
+                                default: 'Player',
+                                description: 'Player layout option'
+                            }),
+                            value: 'player'
+                        },
+                        {
+                            text: formatMessage({
+                                id: 'tw.blocks.layout.editor',
+                                default: 'Editor',
+                                description: 'Editor layout option'
+                            }),
+                            value: 'editor'
+                        },
+                        {
+                            text: formatMessage({
+                                id: 'tw.blocks.layout.fullscreen',
+                                default: 'Fullscreen',
+                                description: 'Fullscreen layout option'
+                            }),
+                            value: 'fullscreen'
+                        }
+                    ],
+                    acceptReporters: false
                 }
             }
         };
@@ -134,7 +188,6 @@ class TurboWarpBlocks {
     getColorTheme () {
         const storedTheme = localStorage.getItem('tw:theme');
 
-        // If tw:theme does not exist, default to Blue.
         if (storedTheme === null) {
             return 'Blue';
         }
@@ -150,14 +203,12 @@ class TurboWarpBlocks {
         if (theme.includes('purple')) return 'Purple';
         if (theme.includes('rainbow')) return 'Rainbow';
 
-        // Unknown or missing color = Blue.
         return 'Blue';
     }
 
     getGUITheme () {
         const storedTheme = localStorage.getItem('tw:theme');
 
-        // If tw:theme does not exist, use the system theme.
         if (storedTheme === null) {
             return window.matchMedia('(prefers-color-scheme: dark)').matches ?
                 'Dark' :
@@ -166,12 +217,10 @@ class TurboWarpBlocks {
 
         const theme = storedTheme.toLowerCase();
 
-        // Midnight is a separate GUI theme.
         if (theme.includes('midnight')) return 'Midnight';
         if (theme.includes('dark')) return 'Dark';
         if (theme.includes('light')) return 'Light';
 
-        // If no GUI theme is specified, default to Light.
         return 'Light';
     }
 
@@ -183,8 +232,100 @@ class TurboWarpBlocks {
         if (goIcon === 'blueflag') return 'Blue Flag';
         if (goIcon === 'purpleflag') return 'Purple Flag';
 
-        // Unknown or missing icon.
         return '';
+    }
+
+    // Layout helpers
+
+    getCurrentLayout () {
+        const path = window.location.pathname.replace(/\/+$/, '') || '/';
+
+        if (path === '/fullscreen') return 'fullscreen';
+        if (path === '/editor') return 'editor';
+        if (path === '/') return 'player';
+
+        return 'unknown';
+    }
+
+    findLayoutButton (text) {
+        return [...document.querySelectorAll('[role="button"]')]
+            .find(element => element.textContent.trim() === text);
+    }
+
+    async waitForLayoutButton (getter, timeout = 10000) {
+        const start = Date.now();
+
+        while (Date.now() - start < timeout) {
+            const button = getter();
+
+            if (button) return button;
+
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
+        throw new Error('CattyMod: Layout button not found.');
+    }
+
+    async exitFullscreen () {
+        const button = await this.waitForLayoutButton(() =>
+            document.querySelector('.stage-header_stage-button_hkl9B')
+        );
+
+        button.click();
+
+        await this.waitForLayoutButton(() =>
+            this.findLayoutButton('See inside') ||
+            this.findLayoutButton('See Project Page')
+        );
+    }
+
+    async switchLayout (args) {
+        const target = String(args.LAYOUT).toLowerCase();
+        let current = this.getCurrentLayout();
+
+        if (!['player', 'editor', 'fullscreen'].includes(target)) {
+            return;
+        }
+
+        // Already in the requested layout.
+        if (current === target) return;
+
+        // Exit fullscreen before switching to Player or Editor.
+        if (
+            current === 'fullscreen' &&
+            (target === 'player' || target === 'editor')
+        ) {
+            await this.exitFullscreen();
+            current = this.getCurrentLayout();
+        }
+
+        // Switch to Editor.
+        if (target === 'editor' && current === 'player') {
+            const button = await this.waitForLayoutButton(() =>
+                this.findLayoutButton('See inside')
+            );
+
+            button.click();
+        }
+
+        // Switch to Player.
+        else if (target === 'player' && current === 'editor') {
+            const button = await this.waitForLayoutButton(() =>
+                this.findLayoutButton('See Project Page')
+            );
+
+            button.click();
+        }
+
+        // Switch to Fullscreen directly.
+        // Does not switch to Editor first.
+        else if (target === 'fullscreen') {
+            const button = await this.waitForLayoutButton(() =>
+                document.querySelector('.stage-header_stage-button_hkl9B')
+            );
+
+            button.click();
+        }
     }
 }
 
