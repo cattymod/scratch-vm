@@ -227,6 +227,8 @@ class TurboWarpBlocks {
     getGoIcon () {
         const goIcon = localStorage.getItem('cattymod:goIcon');
 
+        if (goIcon === null) return 'Play Button';
+
         if (goIcon === 'play') return 'Play Button';
         if (goIcon === 'greenflag') return 'Green Flag';
         if (goIcon === 'blueflag') return 'Blue Flag';
